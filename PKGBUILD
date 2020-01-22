@@ -15,12 +15,14 @@ replaces=('throttled' 'lenovo-throttling-fix')
 backup=('etc/lenovo_fix.conf')
 
 source=("throttled-0.6.tar.gz::https://github.com/erpalma/throttled/archive/v0.6.tar.gz"
+        gpuwrap.sh
         hotkeys.service
         hotkeys.sh
         lenovo_fix_powersave.conf
         lenovo_fix_performance.conf)
 
 sha256sums=('93d11b78d35b99ce345e41291f0268e4c21d0ccb2a80922839e51ec2fe3ae0c1'
+            'SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
@@ -44,6 +46,7 @@ build() {
 }
 
 package() {
+  install -Dm755 gpuwrap.sh "$pkgdir"/usr/bin/gpuwrap.sh
   install -Dm644 hotkeys.service "$pkgdir"/usr/lib/systemd/system/hotkeys.service
   install -Dm755 hotkeys.sh "$pkgdir"/usr/bin/hotkeys.sh
 
