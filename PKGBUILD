@@ -21,10 +21,10 @@ source=("throttled-0.6.tar.gz::https://github.com/erpalma/throttled/archive/v0.6
         lenovo_fix_performance.conf)
 
 sha256sums=('93d11b78d35b99ce345e41291f0268e4c21d0ccb2a80922839e51ec2fe3ae0c1'
-            '2666d74c05f9564ed30fd0c83a451565dfb973ab2eecc7d8567bfdbaab824b54'
-            'f5f28882361ed8500e0b6b991039d3d68f4492ec1e9c99ee06e0aa2143bda2f9'
-            '82b2c67cdc28db232dbbfc4618be2f44e0dee4c5bc11c10e26585b71a39dcd05'
-            '2be62065436f15ea0ce9e18c3b8572cbdfc4e009665af66c2033f748e7006f6e')
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP')
 
 prepare() {
   # Copy default config into two places and tweak for hotkeys selector
