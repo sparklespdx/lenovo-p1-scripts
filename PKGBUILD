@@ -16,12 +16,20 @@ backup=('etc/lenovo_fix.conf')
 
 source=("throttled-0.6.tar.gz::https://github.com/erpalma/throttled/archive/v0.6.tar.gz"
         gpuwrap.sh
+        gpu-module-load.conf
+        gpu-modprobe-nvidia.conf
+        gpu-modprobe-nouveau.conf
         hotkeys.service
         hotkeys.sh
         lenovo_fix_powersave.conf
-        lenovo_fix_performance.conf)
+        lenovo_fix_performance.conf
+        modprobe-thinkpad_acpi.conf)
 
 sha256sums=('93d11b78d35b99ce345e41291f0268e4c21d0ccb2a80922839e51ec2fe3ae0c1'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
@@ -46,13 +54,22 @@ build() {
 }
 
 package() {
+  # GPU
   install -Dm755 gpuwrap.sh "$pkgdir"/usr/bin/gpuwrap.sh
+  install -Dm644 gpu-module-load.conf "$pkgdir"/etc/modules-load.d/nvidia.conf
+  install -Dm644 gpu-modprobe-nvidia.conf "$pkgdir"/etc/modprobe.d/nvidia.conf
+  install -Dm644 gpu-modprobe-nouveau.conf "$pkgdir"/etc/modprobe.d/nouveau.conf
+
+  # Hotkeys
   install -Dm644 hotkeys.service "$pkgdir"/usr/lib/systemd/system/hotkeys.service
   install -Dm755 hotkeys.sh "$pkgdir"/usr/bin/hotkeys.sh
 
+  # Thermal Fixes
   install -Dm644 lenovo_fix_performance.conf "$pkgdir"/etc/lenovo_fix/performance.conf
   install -Dm644 lenovo_fix_powersave.conf "$pkgdir"/etc/lenovo_fix/powersave.conf
+  install -Dm644 modprobe-thinkpad_acpi.conf "$pkgdir"/etc/modprobe.d/thinkpad_acpi.conf
 
+  # throttled
   cd throttled-0.6
   install -Dm644 systemd/lenovo_fix_performance.service "$pkgdir"/usr/lib/systemd/system/lenovo_fix_performance.service
   install -Dm644 systemd/lenovo_fix_powersave.service "$pkgdir"/usr/lib/systemd/system/lenovo_fix_powersave.service
