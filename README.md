@@ -21,7 +21,7 @@ https://download.nvidia.com/XFree86/Linux-x86_64/435.17/README/dynamicpowermanag
 
 The driver will shut down the card into D3 Cold state and bring it back when a process asks for it. This seems to be stable.
 
-I have included the necessary configuration for the `nvidia` module and a shell script called `gpuwrap.sh` that provides the required environment variables for PRIME offloading, i.e. `/usr/bin/gpuwrap.sh glmark2`. These live in the `nvidia/` directory.
+I have included the necessary configuration for the `nvidia` module and a shell script called `gpuwrap.sh` that provides the required environment variables for PRIME offloading, i.e. `/usr/bin/gpuwrap.sh glmark2`.
 
 __Note:__ In order for PRIME offloading to work, you need to provide a suitable X11 configuration as described in the NVIDIA readme. I am using the "hybrid mode" configuration from optimus-manager: https://github.com/Askannz/optimus-manager. This package does not include an X11 config.
 
@@ -33,19 +33,18 @@ The fans also seem to be throttled by default. They spin up to approx. 4500 RPM,
 
 This results in a system that is quiet and cool to the touch under sustained full load. The CPU package does not get over 75\*C, you can barely hear the fans, and the system is very easy to have on your lap. One can only assume this was the manufacturer's intent when setting these limits. It also makes sense that they would try to account for the added heat from the GPU.
 
-However, these settings result in severly reduced clock speeds when under sustained load. It is dissapointing for a system with a late-model i9 processor to consistently run under its base clock speed. The bottleneck is TDP power throttling that is uneccesary.
-
-The desired configuration is to have the motherboard push as much power as the CPU can take and only begin throttling when the CPU hits a specified thermal limit. I have chosen to push this to 85\*C, about 10\* hotter than the factory.
+However, these settings result in severly reduced clock speeds when under sustained load. It is disappointing for a system with a late-model i9 processor to consistently run under its base clock speed. The bottleneck is TDP power throttling set by the BIOS. The desired configuration is to have the motherboard push as much power as the CPU can take and only begin throttling when the CPU hits a specified thermal limit. I have chosen to push this to 85\*C, about 10\* hotter than the factory. I have pushed this to 90\*C and 95\*C in testing. 90\*C is stable on my system at the provided voltage offsets, but the laptop does get very hot. At 95\*C processes will start throwing random segfaults.
 
 My approach to this problem was:
 * Used throttled to manually configure TDP and Temperature throttling limits based on AC vs Battery power and a manual power profile toggle.
 * Created a service that monitors fan speed and CPU temperature and boosts the fan speed to maximum under heavy load.
+* Set a negative voltage offset via thermald.
 
-The CPU is able to push close to 60 watts in this configuration and the fan booster contributes to more stable frequencies over long and heavy loads. The increased fan speed also helps with getting rid of waste heat from high GPU loads.
-
-The GPU being spun up does not seem to significantly impact the temperature of the CPU package until waste heat really stars to build up.
+The CPU is able to push close to 60 watts in this configuration and the fan booster contributes to more stable frequencies over long and heavy loads. The increased fan speed also helps with getting rid of waste heat from high GPU loads. The GPU being spun up does not seem to significantly impact the clock frequency until waste heat really stars to build up.
 
 The package installs thermald from source and provides configurations for it, as well as a hook into hotkeys.sh to trigger manual power profile switching as needed.
+
+__I do not guarantee that my power settings will not damage your system or void your warantee. Use at your own risk.__
 
 TODO: Provide data on performance gains
 
